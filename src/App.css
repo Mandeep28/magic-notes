@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+/* bootstrap custom css */
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+.form-control {
+  /* border: none !important; */
+  border: 1px solid skyblue;
+  /* background: #e7e7e7 !important; */
+}
+.form-control:focus {
+  border: none !important;
+  /* box-shadow: none; */
+}
+
+input::placeholder {
+  color: azure;
+}
