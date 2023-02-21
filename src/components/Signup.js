@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import baseUrl from '../helper';
+import noteContext from "../context/notes/noteContext";
 
-const Signup = (props) => {
+const Signup = () => {
   const navigate = useNavigate();
-  const { showAlert } = props;
-  const hostname = baseUrl;
+  const [btnLoading, setBtnLoading] = useState(false);
+  const { showAlert, fetchFromServer } = useContext(noteContext);
   // useEffect
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      props.showAlert("Please logout to current account to Signup", "warning");
+      showAlert("Please logout to current account to Signup", "warning");
       navigate("/");
     }
     // eslint-disable-next-line
@@ -29,8 +29,6 @@ const Signup = (props) => {
     e.preventDefault();
     const { name, email, password, cpassword } = credential;
     if (password[0] !== cpassword[0]) {
-      console.log("password", password);
-      console.log("conform password", cpassword);
       return showAlert("password not match", "warning");
     }
     const options = {
@@ -38,22 +36,21 @@ const Signup = (props) => {
       headers: { "Content-Type": "application/json" },
       body: `{"name":"${name}","email":"${email}","password":"${password}"}`,
     };
-
-    const response = await fetch(
-      hostname+"/api/v1/auth/createuser",
-      options
-    );
-    const json = await response.json();
-    if (json.status) {
-      console.log("sign up done");
-
-      localStorage.setItem("token", json.token);
-      navigate("/");
-      // show Alert
-      showAlert("Account created Successfully", "success");
-    } else {
-      showAlert(json.msg, "danger");
-      console.log(json);
+    try {
+      setBtnLoading(true);
+      const json = await fetchFromServer("/api/v1/auth/createuser", options);
+      if (json.status) {
+        localStorage.setItem("token", json.token);
+        navigate("/");
+        // show Alert
+        showAlert("Account created Successfully", "success");
+      } else {
+        showAlert(json.msg, "danger");
+      }
+      setBtnLoading(false);
+    } catch (e) {
+      showAlert("Something Went wrong ", "warning");
+      setBtnLoading(false);
     }
     // console.log(json);
   };
@@ -64,7 +61,7 @@ const Signup = (props) => {
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
-          <i className="fa fa-user mx-1"></i>  Enter you name
+            <i className="fa fa-user mx-1"></i> Enter you name
           </label>
           <input
             type="text"
@@ -78,7 +75,7 @@ const Signup = (props) => {
         </div>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
-           <i className="fa fa-envelope mx-1"></i> Email address
+            <i className="fa fa-envelope mx-1"></i> Email address
           </label>
           <input
             type="email"
@@ -93,7 +90,7 @@ const Signup = (props) => {
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">
-           <i className="fa fa-lock mx-1"></i> Password
+            <i className="fa fa-lock mx-1"></i> Password
           </label>
           <input
             type="password"
@@ -107,7 +104,7 @@ const Signup = (props) => {
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">
-           <i className="fa fa-lock mx-1"></i> Cofirm Password
+            <i className="fa fa-lock mx-1"></i> Cofirm Password
           </label>
           <input
             type="password"
@@ -119,12 +116,18 @@ const Signup = (props) => {
             required
           />
         </div>
-      <div className="text-center">
-      <button type="submit" className="btn btn-success w-100 my-1">
-          Signup
-        </button>
-      </div>
-  
+        <div className="text-center">
+          <button
+            type="submit"
+            className="btn btn-success w-100 my-1"
+            disabled={btnLoading}
+          >
+            <span
+              className={btnLoading ? "spinner-border spinner-border-sm" : ""}
+            ></span>{" "}
+            SignUp
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -5,7 +5,6 @@ import NoteItem from "./NoteItem";
 
 const Notes = (props) => {
   const { getNotes, notes, editNote } = useContext(noteContext);
-  const { showAlert } = props;
   const ref = useRef(null);
   const refClose = useRef(null);
   const [note, setNote] = useState({
@@ -42,10 +41,9 @@ const Notes = (props) => {
   const handleOnClick = (e) => {
     e.preventDefault();
     refClose.current.click();
-    console.log("update note ", note);
+    // console.log("update note ", note);
     editNote(note.id, note.etitle, note.edescription, note.etag);
-    // show alert
-    props.showAlert("Note edited successfully", "success");
+
   };
 
   return (
@@ -145,7 +143,7 @@ const Notes = (props) => {
       </div>
       {/*  modal end */}
       <div className="container">
-        <h2>Your notes</h2>
+        <h2 className="my-2">Your notes</h2>
         {notes.length === 0 && "no notes to show ... please add some notes"}
         <div className="row">
           {notes.map((note) => {
@@ -154,7 +152,6 @@ const Notes = (props) => {
                 key={note._id}
                 updatenote={updatenote}
                 note={note}
-                showAlert={showAlert}
               />
             );
           })}

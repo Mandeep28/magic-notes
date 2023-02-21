@@ -2,18 +2,20 @@ import React, { useState, useContext } from "react";
 import noteContext from "../../context/notes/noteContext";
 
 const AddNote = (props) => {
-  const { addNote } = useContext(noteContext);
+  const { addNote ,btnLoading, setBtnLoading } = useContext(noteContext);
   const [note, setNote] = useState({ title: "", description: "", tag: "" });
 
   const handleOnChange = (e) => {
     setNote({ ...note, [e.target.name]: [e.target.value] });
   };
 
-  const handleOnClick = (e) => {
+  const handleOnClick = async(e) => {
     e.preventDefault();
-    addNote(note.title, note.description, note.tag);
+    setBtnLoading(true);
+   await addNote(note.title, note.description, note.tag);
     setNote({ title: "", description: "", tag: "" });
-    props.showAlert("Note added successufully ", "success");
+    setBtnLoading(false);
+    // props.showAlert("Note added successufully ", "success");
   };
 
   return (
@@ -65,8 +67,8 @@ const AddNote = (props) => {
             />
           </div>
 
-          <button type="submit" className="btn btn-primary">
-            Add to note
+          <button type="submit" className="btn btn-primary" disabled={btnLoading}>
+          <span className={btnLoading ? "spinner-border spinner-border-sm" : ""}></span> Add To Note
           </button>
         </form>
       </div>

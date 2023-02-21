@@ -14,44 +14,34 @@ import Notfound from "./components/Notfound";
 import AllNotes from "./components/AllNotes";
 
 function App() {
-  const [alert, setAlert] = useState(null);
   const [showNav, setShowNav] = useState(true);
 
   const handleSetShowNav = (value) => {
     setShowNav(value);
   };
 
-  // function to show alert
-  const showAlert = (message, type) => {
-    setAlert({
-      msg: message,
-      type: type,
-    });
-    setTimeout(() => {
-      setAlert(null);
-    }, 3000);
-  };
+
 
   return (
     <>
       <NoteState>
         <BrowserRouter>
           {showNav && <Navbar />}
-          <Alert alert={alert} />
+          <Alert />
 
           <Routes>
-            <Route exact path="/" element={<Home showAlert={showAlert} />} />
+            <Route exact path="/" element={<Home  />} />
             <Route exact path="/about" element={<About />} />
-            <Route exact path="/allnotes" element={<AllNotes/>} />
+            <Route exact path="/allnotes" element={<AllNotes />} />
             <Route
               exact
               path="/login"
-              element={<Login showAlert={showAlert} />}
+              element={<Login  />}
             />
             <Route
               exact
               path="/signup"
-              element={<Signup showAlert={showAlert} />}
+              element={<Signup  />}
             />
             <Route
               path="*"

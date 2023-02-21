@@ -6,7 +6,42 @@ import noteContext from "./noteContext";
 
 const NoteState = (props) => {
   const [notes, setNotes] = useState([]);
+  const [alert , setAlert] = useState(null);
+  const [btnLoading, setBtnLoading] = useState(false);
+
   const hostName = baseUrl;
+
+
+  const showAlert = (message, type) => {
+    setAlert({
+      msg: message,
+      type: type,
+    });
+    setTimeout(() => {
+      setAlert(null);
+    }, 3000);
+  };
+
+
+// fetch data from server 
+const fetchFromServer = async(endPoint, options) =>{
+  let url = hostName + endPoint;
+  try {
+    const fetchData = await fetch(url, options );
+    const json = await fetchData.json();
+    return json;
+  } catch (error) {
+    
+    // console.log(error);
+    const json= {
+      status: false,
+    }
+    return json;
+    
+  }
+
+}
+
   
 
   // Get All Notes
@@ -18,13 +53,15 @@ const NoteState = (props) => {
       },
     };
 
-    const fetchData = await fetch(
-      hostName + "/api/v1/notes/fetchnotes",
-      options
-    );
-    const json = await fetchData.json();
+    const result = await fetchFromServer("/api/v1/notes/fetchnotes", options);
+    if(result.status) {
+
+      setNotes(result.notes);
+    }
+    else {
+      showAlert("Something Went Wrong", "warning");
+    }
     // console.log(json);
-    setNotes(json.notes);
     // console.log("get all notes");
   };
 
@@ -38,14 +75,12 @@ const NoteState = (props) => {
       },
       body: `{"title":"${title}","description":"${description}","tag":"${tag}"}`,
     };
+    const result = await fetchFromServer("/api/v1/notes/addnote", options);
+    if(result.status) {
 
-    const response = await fetch(hostName + "/api/v1/notes/addnote", options);
-    const json = await response.json();
-    console.log(json);
-
-    // console.log("note added");
-
-    setNotes(notes.concat(json.notes));
+      setNotes(notes.concat(result.notes));
+      showAlert("Note Added Successfully", "success");
+    }
   };
 
   // Delete a note
@@ -55,8 +90,10 @@ const NoteState = (props) => {
       return note._id !== id;
     });
     // console.log(newNotes);
+    showAlert("Note delete successfully", "success");
     setNotes(newNotes);
-    // console.log("note deleted");
+
+    // Api call 
 
     const options = {
       method: "DELETE",
@@ -66,15 +103,10 @@ const NoteState = (props) => {
       },
     };
 
-    const response = await fetch(
-      hostName + `/api/v1/notes/deletenote${id}`,
-      options
-    );
-    const json = await response.json();
-    console.log(json);
-
-    // console.log("note deleted");
+    await fetchFromServer(`/api/v1/notes/deletenote${id}`, options);
+  
   };
+
   // Edit a note
 
   const editNote = async (id, title, description, tag) => {
@@ -92,6 +124,7 @@ const NoteState = (props) => {
     });
 
     setNotes(newNotes);
+    showAlert("Note Upate successfully", "success");
 
     // api call
     const options = {
@@ -103,17 +136,13 @@ const NoteState = (props) => {
       body: `{"title":"${title}","description":"${description}","tag":"${tag}"}`,
     };
 
-    const response = await fetch(
-      hostName + `/api/v1/notes/updatenote${id}`,
-      options
-    );
-    const json = await response.json();
-    console.log(json);
+   await fetchFromServer(`/api/v1/notes/updatenote${id}`,options);
+    
   };
   //
   return (
     <noteContext.Provider
-      value={{ notes, addNote, deleteNote, editNote, getNotes, setNotes }}
+      value={{ notes, addNote, deleteNote, editNote, getNotes, setNotes, showAlert, alert ,btnLoading, setBtnLoading, fetchFromServer }}
     >
       {props.children}
     </noteContext.Provider>

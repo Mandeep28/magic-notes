@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import baseUrl from '../helper';
+import noteContext from "../context/notes/noteContext";
 
-const Login = (props) => {
+const Login = () => {
   const navigate = useNavigate();
-  const { showAlert } = props;
-  const hostname = baseUrl;
+  const [btnLoading, setBtnLoading] = useState(false);
+  const {showAlert, fetchFromServer} = useContext(noteContext);
   // useEffect
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -27,21 +27,26 @@ const Login = (props) => {
       headers: { "Content-Type": "application/json" },
       body: `{"email":"${credential.email}","password":"${credential.password}"}`,
     };
+    try {
 
-    const response = await fetch(
-      hostname+"api/v1/auth/login",
-      options
-    );
-    const json = await response.json();
+      setBtnLoading(true);
+      const json = await fetchFromServer("/api/v1/auth/login", options);
+ 
+  
+
     if (json.status) {
       localStorage.setItem("token", json.token);
       // show Alert
-      props.showAlert("Login Successfully", "success");
+      showAlert("Login Successfully", "success");
       navigate("/");
     } else {
-      props.showAlert(json.msg, "danger");
-      console.log(json);
+      showAlert(json.msg, "danger");
     }
+    setBtnLoading(false);
+  }catch(e) {
+      showAlert("Something Went wrong", "warning");
+      setBtnLoading(false);
+  }
   };
 
   return (
@@ -80,8 +85,8 @@ const Login = (props) => {
           />
         </div>
     <div className="text-center">
-    <button type="submit" className="btn btn-primary my-2  w-100">
-          Login
+    <button type="submit" className="btn btn-primary my-2  w-100" disabled={btnLoading}>
+    <span className={btnLoading ? "spinner-border spinner-border-sm" : ""}></span> login
         </button>
     </div>
    

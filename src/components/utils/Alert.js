@@ -1,17 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
+import noteContext from "../../context/notes/noteContext";
 
-const Alert = (props) => {
+const Alert = () => {
+ const {alert} = useContext(noteContext);
   return (
     <div style={{ height: "50px" }}>
-      {props.alert && (
+      {alert && (
         <div
-          className={`alert alert-${props.alert.type} alert-dismissible fade show`}
+          className={`alert alert-${alert.type} alert-dismissible fade show`}
           role="alert"
         >
           <strong className="text-capitalize mx-1">
-            {props.alert.type === "danger" ? "Error" : props.alert.type}
+            {alert.type === "danger" ? "Error" : alert.type}
           </strong>
-          - {props.alert.msg}
+          - {alert.msg}
         </div>
       )}
     </div>
