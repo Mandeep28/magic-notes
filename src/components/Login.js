@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import baseUrl from '../helper';
 
 const Login = (props) => {
   const navigate = useNavigate();
   const { showAlert } = props;
+  const hostname = baseUrl;
   // useEffect
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -27,7 +29,7 @@ const Login = (props) => {
     };
 
     const response = await fetch(
-      "http://localhost:5000/api/v1/auth/login",
+      hostname+"api/v1/auth/login",
       options
     );
     const json = await response.json();

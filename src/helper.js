@@ -1,2 +1,2 @@
-const baseUrl = "http://localhost:5000";
+const baseUrl = "https://magicnotesbackend.onrender.com";
 export default baseUrl;
