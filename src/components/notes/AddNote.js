@@ -20,7 +20,7 @@ const AddNote = (props) => {
 
   return (
     <div>
-      <div className="container my-4  w-50">
+      <div className="container my-4 ">
         <h2 className="text-capitalize">Add a Note to your Magic Notebook</h2>
         <form onSubmit={handleOnClick}>
           <div className="mb-3 ">

@@ -51,7 +51,7 @@ const Login = () => {
 
   return (
     <div className="container  h-50 d-flex flex-column align-items-center">
-      <h3 className="my-4">Login to Magic Notes</h3>
+      <h3 className="my-4 text-center">Login to Magic Notes</h3>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">

@@ -52,26 +52,30 @@ const Signup = () => {
       showAlert("Something Went wrong ", "warning");
       setBtnLoading(false);
     }
-    // console.log(json);
   };
+
+
+
   return (
     <div className="container  h-50 d-flex flex-column align-items-center">
-      {" "}
-      <h3 className="my-4">Create An Account to use Magic Notes</h3>
-      <form onSubmit={handleSubmit}>
+      <h3 className="my-4 text-center">Create An Account to use Magic Notes</h3>
+      <form onSubmit={handleSubmit}  >
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
             <i className="fa fa-user mx-1"></i> Enter you name
           </label>
           <input
             type="text"
-            className="form-control"
+            className="form-control "
             id="name"
             name="name"
             onChange={handleOnChange}
             value={credential.name}
             required
           />
+             <div className="invalid-feedback">
+            This field is required
+      </div>
         </div>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
@@ -82,6 +86,7 @@ const Signup = () => {
             className="form-control"
             id="email"
             name="email"
+            autoComplete="username"
             aria-describedby="emailHelp"
             onChange={handleOnChange}
             value={credential.email}
@@ -97,6 +102,7 @@ const Signup = () => {
             name="password"
             className="form-control"
             id="password"
+            autoComplete="new-password"
             onChange={handleOnChange}
             value={credential.password}
             required
@@ -111,7 +117,8 @@ const Signup = () => {
             name="cpassword"
             className="form-control"
             id="cpassword"
-            onChange={handleOnChange}
+             onChange={handleOnChange}
+             autoComplete="new-password"
             value={credential.cpassword}
             required
           />
