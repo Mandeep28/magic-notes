@@ -14,3 +14,8 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 ### To see the backend code [click here](https://github.com/mandeep28/magic-notes-server)
+
+### To see the demo of project [click here](https://magic-notes00.netlify.app)
+(* because of some technical error server is down for live demo *)
+
+
