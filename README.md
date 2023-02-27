@@ -16,6 +16,6 @@ You may also see any lint errors in the console.
 ### To see the backend code [click here](https://github.com/mandeep28/magic-notes-server)
 
 ### To see the demo of project [click here](https://magic-notes00.netlify.app)
-#### (Demo of the project is not workind due to some technical issue)
+#### (Demo of the project is not working well due to some technical issue)
 
 
